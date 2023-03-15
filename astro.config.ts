@@ -9,8 +9,8 @@ import codeTitle from "remark-code-title";
 
 // https://astro.build/config
 export default defineConfig({
-  site: "https://nofuss.pages.dev",
-  base: "/",
+  site: "https://themoo96.github.io",
+  base: "/bpall",
   markdown: {
     shikiConfig: {
       theme: "slack-dark",
