@@ -19,6 +19,6 @@ projects = projects.sort((a, b) => new Date(b.frontmatter.pubDate).valueOf() - n
     <h1 class="sm:text-4xl text-3xl font-bold mb-6 dark:text-white">Bpall</h1>
     <p>Bpall's projects and blog</p>
   </section>
-  {projects.map((project) => <ProjectCard {...project.frontmatter} />)}
+  {projects.map((project) => <ProjectCard {...project.frontmatter} url={project.url} />)}
 </Layout>
 <Footer />

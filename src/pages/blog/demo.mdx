@@ -3,9 +3,7 @@ title: Markdown Styling
 description: "Markdown Styling for Blog Posts"
 pubDate: November 30, 2022
 ---
-import BlogImage from "@components/BlogImage.astro"
-import Dog from "@images/jules-beagle-unsplash.jpg"
-import Portrait from "@images/portrait-beagle-unsplash.jpg"
+import Image from "@components/Image.astro"
 
 This is a test blog post to see how markdown styling works. I'm going to try to make this as long as possible to see how the styling works.
 
@@ -129,15 +127,15 @@ export default function Counter() {
 Currently, my custom component for images only supports 16:9 aspect ratio or else it will squish the image.
 
 ```astro
-<BlogImage src={Dog} alt="Beagle Dog by Jules D. on Unsplash" />
+<Image src="/images/jules-beagle-unsplash.jpg" alt="Beagle Dog by Jules D. on Unsplash" />
 
-<BlogImage src={Portrait} alt="Beagle Dog by Jules D. on Unsplash" />
+<Image src="/images/portrait-beagle-unsplash.jpg" alt="Beagle Dog by Jules D. on Unsplash" />
 
 ```
 
-<BlogImage src={Dog} alt="Beagle Dog by Jules D. on Unsplash" />
+<Image src="/images/jules-beagle-unsplash.jpg" alt="Beagle Dog by Jules D. on Unsplash" />
 
-<BlogImage src={Portrait} alt="Beagle Dog by Jules D. on Unsplash" />
+<Image src="/images/portrait-beagle-unsplash.jpg" alt="Beagle Dog by Jules D. on Unsplash" />
 
 ### Strikethrough
 

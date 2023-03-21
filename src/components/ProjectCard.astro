@@ -6,23 +6,26 @@ export interface Props {
   pubDate: string;
   description: string;
   imageSrc: string;
+  url: string;
 }
 
-const { imageSrc, title, description, pubDate } = Astro.props;
+const { imageSrc, title, description, pubDate, url } = Astro.props;
 ---
 
-<section class="py-14 sm:flex sm:items-center sm:justify-evenly text-center sm:text-left">
+<a 
+  href={url + '/'}
+  class="py-4 px-6 sm:py-6 sm:px-12 flex gap-8 flex-wrap sm:items-center sm:justify-between hover:dark:bg-zinc-800 hover:bg-zinc-200 rounded-lg">
   <Picture
-    widths={[112]}
+    widths={[200]}
     sizes="(max-width: 800px) 90vw, 768px"
     src={imageSrc}
     loading="lazy"
     alt={"alt"}
     aspectRatio={1}
-    class="rounded-lg sm:rounded-xl overflow-hidden inline-flex sm:m-8 w-28 h-28"
+    class="rounded-lg sm:rounded-xl overflow-hidden inline-flex w-[200px] max-h-[200px] h-full"
   />
-  <header class="mt-8 max-w-lg sm:my-0 mx-auto sm:mx-0">
-    <h1 class="sm:text-4xl text-3xl font-bold mb-4 dark:text-white">{title}</h1>
-    <p class="max-w-10 font-normal leading-7 dark:text-zinc-300 sm:max-w-sm md:max-w-xl">{description}</p>
+  <header class="max-w-[500px]">
+    <h3 class="sm:text-4xl text-3xl font-bold dark:text-white">{title}</h3>
+    <p class="mt-4 max-w-10 font-normal leading-7 dark:text-zinc-300 sm:max-w-sm md:max-w-xl">{description}</p>
   </header>
-</section>
+</a>
