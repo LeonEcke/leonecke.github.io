@@ -1,0 +1,274 @@
+---
+title: GitPro
+description: "A short long git intro documentation made to assist classmates and myself to learn or relearn git"
+pubDate: 2023-03-23
+---
+# Become a GitPro
+
+This document is written by Leon E.
+
+---
+
+## Quick start
+
+Assumes you already have a git repo setup.
+
+### Overview
+
+Git works through commits and branches. When you stand in a git folder and make changes to any file (not included in .gitignore), those changes are floating in an unsaved state.
+
+First step to committing them is adding them to the "staging area". Staged files will be included in the next commit.
+
+After the relevant files are added to the staging areas, you make a commit which locks the current state of your staged files. This commit has a unique id that you use for things relating to specific commits.
+
+Your git folder is probably hosted on some website (Github), this is your "Remote Origin". It is important to know that you and the remote origin only sync when you pull or push. The remote version of a branch can be very different from your local version.
+
+### Good practices
+
+Note that exceptions to these guidelines exist!
+
+* Pull the remote at the start of your working day.
+  * If you're in a branch, merge (or rebase) parent branch into your branch (if appropriate). (**Make sure you know how!**)
+* Commit only compiling code
+  * Write commit titles and messages in present tense. (Add milk, Fix typo)
+  * Make small commits.
+    * Rule of thumb: If you can't explain your changes in ~50 words, then your commits are too infrequent.
+    * This makes it easier to navigate the commits.
+* Always pull before you push.
+  * NEVER push code that is broken or doesnt pass tests. (Unless theres a fire
+* Keep a clean git. Try to tune .gitignore so that only source files and the project file is included.
+  * No build files!
+  * No personal settings!
+  * Build config (cmake, gradle) are OK!
+  * You should know why every file in ``git status`` was changed
+* No binary files! They are opaque, so you can't see changes or merge!!!
+
+### Bash example
+
+```sh
+git status # show changed files. 
+# (Folders are shown if all internal files are changed.)
+
+git diff # Show differences between your current files and the prev commit
+
+git add . # add all changed files (excluding ones specified in .gitignore)
+# alternatively
+git add [file] # add individual files
+
+git reset # empty staging area, your changes are kept
+
+git commit -m "Commit title" -m "Commit body" # Commit staged files
+
+git log # show previous commits and their hashes
+
+git pull # pull commits from the remote origin version of the current branch into your local version
+
+# Here you might have a merge conflict
+
+git push # push your commits to the remote origin version of the current branch
+```
+
+---
+
+## Commits
+
+More in depth on commands relating to commits.
+
+### Basics
+
+To stage a file is to add it to the list of files that are to be committed. You can stage and commit individual files if that makes the history more clear. Unstaged changes are not discarded when you make a commmit.
+
+Think of a commit as a saved state of your git directory. You can use the commits to look for which changes were made and by whom. Making smaller commits allows you to more effectively move through the history.
+
+You can return to a previous commit and make changes to it. When you commit those changes, you will create a parallell path in the git history. Fututre changes made after the commit you went back to will have to be merged into your current path.
+
+### Status
+
+To see which files have changes to them, and if they are staged or unstaged you use ``git status``. Best case, this contains ONLY the files you've directly changed.
+
+### Checkout
+
+You can go to a previous commit with ``git checkout [commit]`` where ``commit`` refers to the id you attached to the commit you want. This is fetched with ``git log --all`` and looks like ``679c5030b00a5a073a0ca525f1f3f9f8076ff3bc``.
+
+The commit in which you are standing is refered to as "HEAD". It is kinda its own branch.
+
+```sh
+$ git log --all # '--all' also lists future commits
+
+commit f6568e101a3dabded4121d0d96361576e756080a (main)
+Author: You <you@time.agency>
+Date:   Tue Feb 28 13:20:48 2023 +0100
+
+    Whos there?
+
+commit f7199b3b7aa727ee322268f88b0ee1a1e97f0d77 (HEAD)
+Author: You <you@time.agency>
+Date:   Tue Feb 28 13:20:48 2023 +0100
+
+    First things first
+
+commit 07ac298a9e8dee48b5024fd465619d513ae1e6e7
+Author: You <you@time.agency>
+Date:   Tue Feb 28 13:20:48 2023 +0100
+
+    The beginning
+```
+
+Here you can see a log of a mockup git repo. Note that "HEAD" is separate from "main" as I am checked out on a previous commit.
+
+You can also use `git checkout [commit] [file]` to pull in a file from a previous commit. If this is a currently deleted file, then it will create a new file with the contents from the targeted commit. If you already have the file, you will instead overwrite that file with the version from the targeted commit.
+
+### Diff
+
+``git diff [commit]`` allows you to see the changes between your current HEAD and the branch you want. If you don't give a commit id, then you will (I think) compare your current unstaged changes with the last commit (relative HEAD). Note that this opens in a "less" text enviroment. (press q to return to the shell).
+
+### Reset
+
+You made changes you don't like and want to change them back. Then you can use ``git reset [branch]``. This comes in two (actually three) flavours: ``--hard`` and "vanilla" (no --hard). They also depend on if you've commited your changes or not.
+
+You can also reset individual files using ``git reset [commit] [file]``. Here a vanilla reset will add the reset file to your staging, but keep the changed version live. No idea why you'd want that. Instead use ``git reset --hard [commit] [file]`` to also discard any changes you've made to that file.
+
+#### Uncommitted
+
+Note: If you exclude the ``[commit]`` argument, you will reset to the previous commit.
+
+If you have changes that are staged but not commited, then the vanilla reset will simply unstage all your staged commits. While a hard reset will also remove your changes. (**This is permanent**)
+
+#### Committed
+
+Here, a vanilla reset will move you to the specified commit, but it will keep your changes from the commit you came from. They will be unstaged though. A hard reset will (in theory) remove your commit(s) and all changes therein. You can use the argument ``HEAD^`` to "aim" at the previous commit.
+
+### Revert
+
+If you need to remove the changes brought on by an earlier commit, then you can use the command ``git revert [commit]``. This will prompt the user to document what they are reverting, probaby in the terminal using the default text editor. After this, you will create a new commit that have the changes brought on by that commit removed.
+
+See now why smaller commits are important!?
+
+### Merge
+
+You can merge together commits. If you were to checkout a commit and made changes from it, then you would want to implement those changes into the later commits you just made an alternative path from. Here you use ``git merge [commit]``. This will attempt to pull the changes from the commit you specified into your version.
+
+Important to note that you *take changes* ***from*** *the commit you specified*!!!
+
+Here you might encounter Merge Conflicts!
+
+#### Merge conflicts
+
+Merging is smart. If there is no reason to throw a conflict, then it wont. It detects conflicts by looking relative to other content. If it thinks that you have edited the same row in a document as the merging commit has, then it will stop and wait for you to resolve the merge conflict. It will do so by editing the file so that it contains both the versions. You then need to edit the document so that the contents are correct. For example:
+
+```txt
+version A             |   Version B
+-----------------------------------------
+Line one              |   Line one
+Line two              |   Line two
+Line three            |   Line 3
+```
+
+Merging these two files will generate a file that looks like the following:
+
+```txt
+Line one
+Line two
+<<<<<<< HEAD
+Line three
+=======
+Line 3
+>>>>>>> [commit id]
+
+```
+
+Resolving this is as easy as deleting that which you don't want, and keeping that which you do want. If you want both versions, then you simply just remove the syntax that the conflict added. Then once the file looks like you want it, you stage the file and commit the merged version.
+
+Should you want to stop the merge in this conflict state, then you use ``git merge --abort``. This will undo the changes brought on by the merge conflict.
+
+Note that your "legal" actions are limited while in a merge conflict state.
+
+### Rebase
+
+An alternative to merging is rebasing. This is often seen as a more risky version to merging, but this is probably becaus it doesnt generate merge conflicts as far as I know.
+
+```txt
+__a___b___c___d             | after >    __a___b___c___d___
+      \__e__f___g           | merge            \__e__f___g_\__h
+```
+
+Here is a git log, at some point you went back to commit `b` and started working paralell to it. Merging `d` into `g` would take commit `d` and apply that code into `g`. This could result in merge conflicts.
+
+A rebase instad takes all the commits made since the paths diverged and applies them to the end of the commit you're rebasing to. `git rebase [commit]`
+
+```txt
+__a___b___c___d             | after >    __a___b___c___d__e__f__g
+      \__e__f___g           | rebase           \__e__f___g
+```
+
+Note: A rebase takes the commits from where youre standing and applies them to the target commit.
+
+#### Interactive rebase
+
+Say you have your commits in the wrong order, or you simply want controll over in what order a commit goes, then you will use the interactive rebase command. `git rebase -i [commit]`. This will give you a text file in which you can specify what you want to do with each individual commit, and in which order. To make the first commit go before the other, you simply put that line above the other.
+
+```txt
+pick [commit id] [Commit title for first commit]
+pick [commit id] [Commit title for other commit]
+
+# Rebase ea4e5f4..58c371d onto ea4e5f4 (2 commands)
+#
+# Commands:
+# p, pick <commit> = use commit
+
+[...more commands shown in actuality...]
+```
+
+If you wish to abort, then you remove all text and exit.
+
+You don't have to rebase this way onto another path. You can instead target the first commit in your path that you wish to reorganize. This will create another path from that targeted commit that has the future commits in the correct order.
+
+### Cherry-pick
+
+If you want to take the changes from one specific commit and apply them to your enviroment, then `git cherry-pick [commit]` is for you. It simply copies over that specific commit and applies it to your commit. Another reason why small commits are nice.
+
+### Bisect
+
+Many commits may make it hard to track down a bug though. Say you have one commit somewhere in a path of 50 commits that introduces a bad behaviour. You dont know why or where, but you can know if the behaviour exists or not. Here you use `git bisect`. In it's core it allows you to make a binary search of your commits. You start by running `git bisect start`, then while you're standing in a commit that has the bad behaviour, you run `git bisect bad`. After which you move to some commit from before this behaviour was introduced, doesn't matter where. Here you run `git bisect good`.
+
+Now you are moved to the commit inbetween the commit you tagged good, and bad. Here you check for the bad behaviour. If it exists, then you run `git bisect bad`, or if it's not here then you run `git bisect good`. This will move the relevant tag to where you're standing and yet again move you to the commit between them. This is reperated til filnally you're standing on the commit that introduced the bad behaviour. Take note of which commit then run `git bisect reset` to return to where you stood at the beginning.
+
+### Reflog
+
+Have you moved around a bunch and dont remember on which commits you've been? `git reflog` will show you the log of where you moved, with the most recent at the top.
+
+---
+
+## Branches
+
+A branch is nothing without commits. The easiest way to think of a branch is that it is a marker on the commit tree. In most cases you can use the branch name as a replacement to a commit id. If you make a commit while standing on a branch, then that branch will move with the commit. But remember that you can move your HEAD branch separate from the other branches.
+
+Often you will have multple brances on the same commit. "HEAD" and "Main" for example. Or "Main" and "origin/Main", which would mean the "Main" and the "remote origin" are synced.
+
+On this note, always remember that the local and remote versions of the same branch are two completely separate branches. Theyre simply linked with a tracking connection. This is why you need to pull and push to it when you want your changes reflected.
+
+Standard practice is "branch by feature". This is the practice of giving each new feature its own branch in which its developed. This is recursively. You avoid working on main this way, making sure that main always contains a stable version.
+
+You can list the current local branches with `git branch`. Or if you have recently done a `git fetch`, you can do `git branch --all` to list the branches that are on a remote origin. To switch to a branch, you do `git checkout [branch]`. This also works with remote origin branches that dont appear without you adding the `--all` setting.
+
+### Creating a branch
+
+To create a branch you run `git branch [branch-name]`. You then switch to it with `git checkout [branch]`. From here you make your first commit to the branch.
+
+After you have one unique commit that the branch is pointing to, you can push it to the remote origin using `git push -u origin [your-branch-name]`. The branch name should tab-complete. The `-u` argument is short for `--set-upstream`. This creates another branch that mirrors that of the remote origin version's version of the branch named "origin/[branch]". Nothing you need to worry about though.
+
+### Deleting branches
+
+`git branch -d [branch]`. This will remove your local copy of a branch. You can remove branches from the remote origin using `git push origin --delete origin/[branch]`. This can also be done once you've completed a pull request.
+
+### Pull Request
+
+==Add info==
+
+OBS! Work on this is ended because of getting around to doing actual work. The latest version will be found on bPall.se/
+
+---
+
+## Fresh git
+
+## Misc
