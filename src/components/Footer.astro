@@ -4,11 +4,11 @@ import { Icon } from "astro-icon";
 const socials = [
   {
     name: "Linkedin",
-    url: "",
+    url: "https://www.linkedin.com/in/leon-eckerbom-685211231",
   },
   {
     name: "Resumé",
-    url: "",
+    url: "/leon_cv.pdf",
   },
 ];
 ---
@@ -26,7 +26,7 @@ const socials = [
     </a>
     <ul class="sm:border-l-[1px] sm:pl-12 text-zinc-800 dark:text-zinc-300 flex gap-8 text-base items-center text-zinc-600 dark:text-zinc-300">
       {
-        socials.map((social) => {
+        socials.map(social => {
           return (
             <li>
               <a href={social.url} class="hover:underline" target="_blank">
