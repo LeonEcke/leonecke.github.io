@@ -18,11 +18,15 @@ I've used this technique through university, mostly to get myself through the to
 
 The main idea behind it was the "Library approved" notification method. An array of 8 RGB LEDs sit proudly on top of the device and communicates the state of the clock though different combinations of pulsing colours and brightnesses. In addition to these LEDs was also a 4 digit "`88:88`" format 7 segment display. The clock also features two buttons; one for pausing and advancing the progression of the timer sequence, and another for skipping forwards. The two buttons are also used at startup to select one of 3 hardcoded time-chunk presets. But the biggest feature and the reason it resonated so well with me was the fact that it notified you using purely visual means. While the clock was running, it showed you this smooth calm animation, while the 7 segment display showed the time left of the current chunk. To minimize distracting flashes it did so without showing the single seconds, instead only showing the remaining tens. 
 
-<img src="/images/Ch0/Ch0_1.png" width="150px" height="100px" align="right"/>
+<table>
+    <tr>
+        <img src="/images/Ch0/Ch0_1.png" width="300px" align="left"/>
+        <img src="/images/Ch0/Ch0_2.png" width="300px" align="center"/>
+    </tr>
+</table>
+
 
 Once you hit zero on the time-chunk you got notified by the lights pulsing in more noticeable colours and patterns, and the 7 segment starts counting up now with the single seconds showing. The result of this is that when the time is up you are not interrupted and forced to stop a loud timer, but instead you notice it when you notice it, and you get shown how far overtime you are. How often are you actually *done* at the time you said you'd be done? Basically never in my experience. Which is why the ability to snooze the alarm is also an amazing feature. With a click you subdue the lights, but keeps the timer counting up. Then when **you** are ready to progress, you click on to the next time-chunk. 
-
-![Image](/images/Ch0/Ch0_2.png)
 
 All of this culminated into a prototype so good that I found an irresistible urge to straight up copy the base concepts, with some minor tweaks. I got permission and started working on my own version.
 
@@ -34,31 +38,34 @@ I had three components I wanted to change. The UX, the design, and the microcont
 
 One of the major things I wanted to change would be the "hackyness" of the design. By both making it smaller and not openly exposing any electronics (even though I think it's a cool look), I figured it could look less fragile and bomb-like while on your desk. I also wanted to decrease the amount of RGB LEDs, as 8 seemed excessive.
 
-![Image](/images/Ch0/Ch0_3.png)
+<img src="/images/Ch0/Ch0_3.png" width="400px" align="center"/>
 
 My first design kept the 7 segment display, but focused all of the light to the top of a triangle shape. I quite liked this design, especially if I was able to put the LEDs behind a diffuser so that it looked as if the entire "LED Bar" was one solid light. These designs also featured two additional single color LEDs to act as status lights. I quickly realized the redundancy of them though and removed them. Another thing that got chopped was the button, as seen in the following image. 
 
-![Image](/images/Ch0/Ch0_4.png)
+<img src="/images/Ch0/Ch0_4.png" width="450px" align="center"/>
 
 I figured that if I were to condense all the lights into a bar on the top, then that bar would probably need to be of a different material than the rest of the clocks body. So what if that part was half loose and could pivot on a central point? Could that be the only piece of user interface? If so then the clock would instantly look pretty damned clean. 
 
 Last on the chopping block was the 7segment display. I wouldn't remove it, but I do think they're pretty ugly. The empty segments are too bright for the surrounding black-painted face. In certain light it can be hard to read it. I had found an article on Hackaday<sup>[3]</sup> that showed how you could use car window tint plastic to hide the inactive segments. It was a really good idea, but as I didn't wanna buy much more than I needed and I have no car interested friends with any leftovers, I figured I'd do it another way.
-
-![Image](/images/Ch0/Ch0_8.png)
-
-![Image](/images/Ch0/Ch0_9.png)
-
+<table>
+    <tr>
+        <img src="/images/Ch0/Ch0_8.png" width="280px" align="left"/>
+        <img src="/images/Ch0/Ch0_9.png" width="250px" align="center"/>
+    </tr>
+</table>
 By scraping off the black paint from the display, and putting a .2mm (I used .4mm later on) layer of pla over the display, you managed to hide empty segments almost entirely. Much prettier than having a big black box on the face, especially if I actually end up going with the design from above. Actually completing the design of the Pomoljus is left up to when I make a more final housing for it.
 
 ### The UX 
 
 The navigation of the clock was also something I thought could use some improvement. It's also a part I thought would be interesting to explore, the limited user interface being limited to some RGB LEDs and 2 buttons seemed like an interesting challenge. I also tried to make the flow as smooth as possible, which means that I tried to keep the right click as a "normal progression" and the left click as a more settings or "other" options key. 
 
-![Image](/images/Ch0/Ch0_7.png)
+<img src="/images/Ch0/Ch0_7.png" width="250px" align="left"/>
 
 I began by drawing up a state diagram of the Pomoljus from boot to active timer mode. Something I wanted to add was the ability to change your time-chunk settings without needing to re-flash it or access it through some external device. I thought it would be an important aspect to dialing in the chunks to fit the users needs. To avoid being more overwhelming than it already is I limited it to the 4 base components of the timer system, which should give the user a lot of customizability still.
 
-![Image](/images/Ch0/Ch0_6.png)
+ㅤ
+
+<img src="/images/Ch0/Ch0_6.png" width="420px" align="right"/>
 
 Then its just the part where you actually use the thing left. Here I wanted to give the user the ability to pretty quickly move through the "UI". You still have the ability to snooze the alarm, but also continue straight onwards to the next block. Paused mode and the alarm mode both show the full second count, while the running timer only shows tens to reduce visual noise. 
 
@@ -74,14 +81,26 @@ In the core, the Pomoljus is a battery driven and portable device. I don't like 
 
 The 7segment was hard to source, but the classmate from before managed to and came in clutch right as I was ready to give up on the entire display. Fun fact, the cheap Chinese vendors are filled with cheap 4 digit 7 segment displays, but they're all the same products and they're all *wrong*. Do I gain anything on spending sleepless nights searching pages and pages of the same 5 products in the hopes of finding one that is the slight variation that I want? Yes. Yes I actually gain a lot on it and I will not take any questions on tha matter. 
 
-![Image](/images/Ch0/Ch0_10.png)
+<img src="/images/Ch0/Ch0_10.png" width="500px" align="center"/>
 
 For the main attraction the RGB LEDs I wanted to get some ws2812 serially addressable lights. But as they were basically impossible to get loose, and I didn't wanna wait around for them, I instead went for their cousins the KS6812, or more specifically the 3.5x3.5mm SK6812MINIs. Works basically the same, but they're cheaper and in stock.
 
 For the brain I chose to go with the RP2040 instead of an ARM based chip that I learnt how to use during university, as the RP2040 is cheaper and in stock. They also have quite good specs *imo*, especially with the dual cores and their PIO shenanigans. I also just wanted to learn how to use a different toolchain than I did for school.
 
-An issue with the RP2040 would be the fact that it's not officially[citation]
+Then I also have some data, in the form of input to the RGB LEDs, and output from the two buttons. An issue with the RP2040 would be the fact that it's not officially<sup>[4]</sup> 5V compliant. Which means that I need to level shift both of these data signals. This was harder to find out how to properly do than it was to actually do. Since both data lines are high impedance, meaning there's no real current draw worth calling home about, you can get away with some pretty simple step-up/down circuits. I'll go over the details more in Ch.1. 
+
+## What's next
+
+As of writing this, I have already designed and ordered the second revision of the light bar PCB. I'll maybe manage to write together the next chapter, which will be about my design of the PCB itself. I've had some thoughts about the general design too since then, as the battery is much larger than I expected and the 7 segment much thicker. But that I might just mention in passing... I guess we'll see.
+
+---
+
+1. https://francescocirillo.com/products/the-pomodoro-technique
+2. https://www.st.com/en/evaluation-tools/nucleo-f401re.html
+3. https://hackaday.com/2022/06/03/quick-tip-improves-seven-segment-led-visibility/
+4. https://hackaday.com/2023/04/05/rp2040-and-5v-logic-best-friends-this-fx9000p-confirms/
 
 [1]: https://francescocirillo.com/products/the-pomodoro-technique
 [2]: https://www.st.com/en/evaluation-tools/nucleo-f401re.html
 [3]: https://hackaday.com/2022/06/03/quick-tip-improves-seven-segment-led-visibility/
+[4]: https://hackaday.com/2023/04/05/rp2040-and-5v-logic-best-friends-this-fx9000p-confirms/
