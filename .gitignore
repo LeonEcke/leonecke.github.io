@@ -22,3 +22,6 @@ pnpm-debug.log*
 package-lock.json
 yarn.lock
 
+# IDE stuff
+.github
+.devcontainer
