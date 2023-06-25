@@ -9,7 +9,7 @@ import codeTitle from "remark-code-title";
 
 // https://astro.build/config
 export default defineConfig({
-  site: "https://themoo96.github.io",
+  site: "https://bpall.se",
   base: "/",
   markdown: {
     shikiConfig: {
