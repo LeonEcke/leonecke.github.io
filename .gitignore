@@ -25,3 +25,7 @@ yarn.lock
 # IDE stuff
 .github
 .devcontainer
+
+# misc
+./pnpm-lock.yaml
+src/pages/blog/.vscode/
