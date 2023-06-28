@@ -16,7 +16,7 @@ There will hopefully be a couple future project logs that will follow the contin
 
 The projects foundation is based upon the Pomodoro Technique<sup>[\[1\]](#references)</sup>. The basics of it is simple; you split your working time into smaller chunks, spaced with short breaks, and after a few work-chunks you get a longer break. The most common version is 25 minutes of work, with a 5 minute break, and a 15 minute break after your third work-chunk. But I know people who prefer longer  and shorter variations. 
 
-I've used this technique throughout university, mostly to get myself through the tougher courses. More accurately I've used many shoddy apps <sup>*(one of my own making)*</sup> and one surprisingly good hacked together physical timer that a classmate built. It may have been a mess of wires and had a slightly challenging user interface, but it was the most effective studying tool that I've found. It's built using a custom shield for an STM32 Nucleo F401RE<sup>[\[2\]](#references)</sup> development board, and runs on Rust. 
+I've used this technique throughout university, mostly to get myself through the tougher courses. More accurately I've used many shoddy apps <sup>*(one of my own making)*</sup> and one surprisingly good hacked together physical timer that a classmate built. It may have been a mess of wires and had a slightly challenging user interface, but it was the most effective studying tool that I've found. It's built using a custom shield for an STM32 Nucleo F401RE<sup>[\[2\]](#references)</sup> development board, and runs on Rust<sup>[\[3\]](#references)</sup>. 
 
 <img src="/images/Ch0/Ch0_1.png" width="250px" align="right"/>
 
@@ -44,7 +44,7 @@ My first design kept the 7 segment display, but focused all of the light to the 
 
 I figured that if I were to condense all the lights into a bar on the top, then that bar would probably need to be of a different material than the rest of the clocks body. So what if that part was loose and could pivot on a central point? Could that be the only piece of user interface? If so then the clock would instantly look pretty damned clean. 
 
-Last on the chopping block was the 7segment display. I wouldn't remove it, but I do think they're pretty ugly. The empty segments are too bright for the surrounding black-painted face. In a certain light it can be hard to read. I had found an article on Hackaday<sup>[\[3\]](#references)</sup> that showed how you could use car window tint plastic to hide the inactive segments. It was a really good idea, but as I didn't wanna buy an entire roll of it and I have no car interested friends with any leftovers, I figured I'd do it another way.
+Last on the chopping block was the 7segment display. I wouldn't remove it, but I do think they're pretty ugly. The empty segments are too bright for the surrounding black-painted face. In a certain light it can be hard to read. I had found an article on Hackaday<sup>[\[4\]](#references)</sup> that showed how you could use car window tint plastic to hide the inactive segments. It was a really good idea, but as I didn't wanna buy an entire roll of it and I have no car interested friends with any leftovers, I figured I'd do it another way.
 <table>
     <tr>
         <img src="/images/Ch0/Ch0_8.png" width="280px" align="left"/>
@@ -73,7 +73,7 @@ In the end, this is something that will have to get carved into stone when I tac
 
 I am not an electrical engineer. I know enough to know I don't know anything. I could've almost certainly selected better components for this, but oh well. Just you wait til the PCB design in the next project log. 
 
-In the core, the Pomoljus is a battery driven and portable device. I don't like single use batteries, and my experience with rechargeable AA batteries has left me wanting more. So I chose a 18650 LiPo battery. For those who don't know, it's a popular format of rechargeable batteries that packs quite a bit of power into a pretty compact format. Perfect for my little project. To charge this, I could either try to build my own battery management system, or just get a pre-made off the shelf one. I did the latter and moved on. This would basically guarantee that I could run the Pomoljus off the battery, charge the battery from USB, and run the Pomoljus from the USB while the battery is charging. Which would make it one step above the apple mouse <sup>[\[4\]](#references)</sup>. 
+In the core, the Pomoljus is a battery driven and portable device. I don't like single use batteries, and my experience with rechargeable AA batteries has left me wanting more. So I chose a 18650 LiPo battery. For those who don't know, it's a popular format of rechargeable batteries that packs quite a bit of power into a pretty compact format. Perfect for my little project. To charge this, I could either try to build my own battery management system, or just get a pre-made off the shelf one. I did the latter and moved on. This would basically guarantee that I could run the Pomoljus off the battery, charge the battery from USB, and run the Pomoljus from the USB while the battery is charging. Which would make it one step above the apple mouse <sup>[\[5\]](#references)</sup>. 
 
 <img src="/images/Ch0/Ch0_10.png" width="400px" align="right"/>
 
@@ -83,7 +83,7 @@ For the main attraction, the RGB LEDs, I wanted to get some WS2812 serially addr
 
 For the brain I chose to go with the RP2040, instead of an ARM based chip that I learnt how to use during university, as the RP2040 is cheaper and in stock. They also have quite good specs *imo*, especially with the dual cores and their PIO shenanigans, which I think will come in handy for this project. I also just wanted to learn how to use a different toolchain than I did for school.
 
-Then I also have some data, in the form of output to the RGB LEDs, and input from the two buttons. An issue with the RP2040 would be the fact that it's not officially<sup>[\[5\]](#references)</sup> 5V compliant. Which means that I need to level shift both of these data signals. This was harder to find out how to do properly than it was to actually do. Since both data lines are high impedance, meaning there's no real current draw worth calling home about, you can get away with some pretty simple step-up/down circuits. I'll go over the details more in the next project log. 
+Then I also have some data, in the form of output to the RGB LEDs, and input from the two buttons. An issue with the RP2040 would be the fact that it's not officially<sup>[\[6\]](#references)</sup> 5V compliant. Which means that I need to level shift both of these data signals. This was harder to find out how to do properly than it was to actually do. Since both data lines are high impedance, meaning there's no real current draw worth calling home about, you can get away with some pretty simple step-up/down circuits. I'll go over the details more in the next project log. 
 
 ## What's next
 
@@ -97,6 +97,7 @@ Lastly, I wanna say thanks for reading along to whatever portion of this you fel
 
 1. [https://francescocirillo.com/products/the-pomodoro-technique](https://francescocirillo.com/products/the-pomodoro-technique)
 2. [https://www.st.com/en/evaluation-tools/nucleo-f401re.html](https://www.st.com/en/evaluation-tools/nucleo-f401re.html)
-3. [https://hackaday.com/2022/06/03/quick-tip-improves-seven-segment-led-visibility/](https://hackaday.com/2022/06/03/quick-tip-improves-seven-segment-led-visibility/)
-4. [https://www.theverge.com/22967776/apple-magic-mouse-charging-port-bottom-upside-down-its-2022](https://www.theverge.com/22967776/apple-magic-mouse-charging-port-bottom-upside-down-its-2022)
-5. [https://hackaday.com/2023/04/05/rp2040-and-5v-logic-best-friends-this-fx9000p-confirms/](https://hackaday.com/2023/04/05/rp2040-and-5v-logic-best-friends-this-fx9000p-confirms/)
+3. [https://www.rust-lang.org/](https://www.rust-lang.org/)
+4. [https://hackaday.com/2022/06/03/quick-tip-improves-seven-segment-led-visibility/](https://hackaday.com/2022/06/03/quick-tip-improves-seven-segment-led-visibility/)
+5. [https://www.theverge.com/22967776/apple-magic-mouse-charging-port-bottom-upside-down-its-2022](https://www.theverge.com/22967776/apple-magic-mouse-charging-port-bottom-upside-down-its-2022)
+6. [https://hackaday.com/2023/04/05/rp2040-and-5v-logic-best-friends-this-fx9000p-confirms/](https://hackaday.com/2023/04/05/rp2040-and-5v-logic-best-friends-this-fx9000p-confirms/)
