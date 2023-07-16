@@ -27,8 +27,22 @@ But which connector? Well, how many wires do we need? We need two wires for each
 
 ### Tangent: Logic levels and voltages
 
-Data in the electrical world is represented in many ways. But in the core of it all are the bits. The smallest possible pieces of information. Ones and zeroes. But what are bits? Well that depends on where you want the bits to be. If you're a mainframe computer in the 60s, the bits are probably holes in a sheet of paper. But we're a Pomoljus. For us, the bits are electricity!
+Data in the electrical world is represented in many ways. But in the core of it all are the bits. The smallest possible pieces of information. Ones and zeroes. Bits themselves have no intrinsic meaning, and is completely up to the reader.
+The buttons for example will "give" a one when pressed in, and a zero when not. But the SK6912s bits will be more structured, taking the shape of 16 bit long binary values in a certain order.
 
+But what are bits? Well that depends on where you want the bits to be. If you're a mainframe computer in the 60s, the bits are probably holes in a sheet of paper. But we're a Pomoljus. For us, the bits are electricity! 
 More specifically, they're differences in voltages.
+
+But what are voltages? Okay, lets maybe not go that far. But what voltages is a valid question. You can't stuff 220V into a computer and call it a bit. Things and stuff expect certain voltages, both to work and to decypher them into bits. 
+And just to be funny, the voltage to power a device and the voltage it wants as digital logic are usually different. How fun!
+The SK6812 LEDs for example require 5V both to power them, and for their data inputs. But the RP2040 that will run the show is powered by 5V, but it's data inputs and outputs are required to be in 3.3V. Which sadly for us is lower than 5V.
+
+Well what if we try and stick it to *the man* and push 3.3V into the 5V logic input of the SK6812 then what? Other than being a real rebel... Nothing really. 3.3 is roughly halfway between logical levels for the SK6812 of zero and five.
+That means that the rebellious attempts at bits go straight into **undefined limbo**. 0V will probably still be a zero, but who knows what 3.3V will mean. All in all it's pretty harmless.
+
+That can't be said for if you send 5V into something expecting 3.3V. At the best, you get some undefined behaviour; at worst, you get a puff of magic smoke. Since the device isn't expecting anything above 3.3V, making it able to handle it would just be a waste of resources.
+
+.
+
 
 ((( Lägg till en punktlista för att visa djupet )))
