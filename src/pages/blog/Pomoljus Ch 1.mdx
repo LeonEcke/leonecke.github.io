@@ -23,7 +23,9 @@ Five SK6812 RGB LEDs and two buttons of some kind that need to pivot on a centra
 First things first, we need to connect this PCB with the other PCB. This can be solved in many ways, like having some naked copper pads to solder a couple wires to, or perhaps you add some edge connectors and solder the PCBs together directly.
 Both these are valid, but come with their own challenges and limitations. I instead chose a different set of challenges and decided to use a standardized connector.
 
-But which connector? Well, how many wires do we need? We need two wires for each buttons input data, then another for sending data to the SK6812s. Then we also need to power the components. But that raises the question of logic levels:
+But which connector? Well, how many wires do we need? We need two wires for each buttons input data, then another for sending data to the SK6812s. Then we also need to power the components, which means we want a 5V and GND wire too. So 5 wires in total. Some searching lead to a JST connector[citation]. If you've seen one of the later Raspberry Pi Pico dev boards, then you will recognice it as the beige connector at the opposite end from the USB port.
+
+Okay, but hold on. Since the 639 page long datasheet for the RP2040 has been a steady companion on all of our nightstands for the past few weeks, we obviously know that the RP2040 can only put out 3.3V. But the SK6812s require a 5V data input? What does that even mean?
 
 ### Tangent: Logic levels and voltages
 
@@ -42,7 +44,14 @@ That means that the rebellious attempts at bits go straight into **undefined lim
 
 That can't be said for if you send 5V into something expecting 3.3V. At the best, you get some undefined behaviour; at worst, you get a puff of magic smoke. Since the device isn't expecting anything above 3.3V, making it able to handle it would just be a waste of resources.
 
-.
+Now that should be enough redundant text about things that most people already know either explicitly or intuativly to return us to where we left off.
+
+### Tangent end
+
+Where were we? Right, two different logic levels. Thankfully for us, there's ways to solve this quite easily with the use of a transistor. Think of a transistor as an electrically controlled switch. It takes a current or voltage to controll the internal resistance between two points. That allows a lower voltage source to control a highter voltage source.
+Exactly what we need to step up the data from 3.3V to 5V. So let's add a transistor to the shopping list. But... Which transistor? PNP, or NPN, or MOSFET, or J-FET, or... Don't worry about it. This isn't a new problem that needs solving, and smarter people have solved it before. Oh, and we also need another resistor.
+
+Okay, and now the buttons. How do they actually work? You press one and they connect 5V to the button input? That would be not so smart.
 
 
 ((( Lägg till en punktlista för att visa djupet )))
