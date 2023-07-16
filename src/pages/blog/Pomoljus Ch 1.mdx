@@ -17,4 +17,18 @@ Thankfully for us in this purpose, the solution is simple. Just add resistance. 
 Our simple corcuit now turned a touch more complex. PCBs are also usually quite ridgid unless you pay extra.
 So to make sure we fit the design from the previous chapter [citation], we will actually need two PCBs. One for the lights and two buttons, then one for the rest of it. At least that's the current idea.
 
+## The Lightbar
 
+Five SK6812 RGB LEDs and two buttons of some kind that need to pivot on a central axis. Those are the only two requirements of this board. But if it was this simple.
+First things first, we need to connect this PCB with the other PCB. This can be solved in many ways, like having some naked copper pads to solder a couple wires to, or perhaps you add some edge connectors and solder the PCBs together directly.
+Both these are valid, but come with their own challenges and limitations. I instead chose a different set of challenges and decided to use a standardized connector.
+
+But which connector? Well, how many wires do we need? We need two wires for each buttons input data, then another for sending data to the SK6812s. Then we also need to power the components. But that raises the question of logic levels:
+
+### Tangent: Logic levels and voltages
+
+Data in the electrical world is represented in many ways. But in the core of it all are the bits. The smallest possible pieces of information. Ones and zeroes. But what are bits? Well that depends on where you want the bits to be. If you're a mainframe computer in the 60s, the bits are probably holes in a sheet of paper. But we're a Pomoljus. For us, the bits are electricity!
+
+More specifically, they're differences in voltages.
+
+((( Lägg till en punktlista för att visa djupet )))
