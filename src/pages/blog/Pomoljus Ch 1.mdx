@@ -10,4 +10,11 @@ Chapter one in the project log for the Pomoljus project. This log will dive into
 
 ## The Physical Realm
 
-The first step to creating a printed circuit board <sup>*(PCB)*</sup> is to go window shopping.
+As the Pomoljus is a physical object, it's also constrained by physical laws. For electricity to flow from the battery to the LEDs, there needs to be some sort of connection between them made from some conductive material.
+The standard for this nowdays happens to be copper <sup>*(or gold if you're fancy)*</sup> stuck to a glassfiber sheet. This is of course a printed circuit board, or PCB. But you cant just connect a power source to a light, as the amount of power that flows through the circuit is directly proportional to the resistance in said circuit.
+Upsettingly for us in this purpose, the copper traces on the PCB, and most of our components are quite low resistance, which would give us a current so high that the components would go poof.
+Thankfully for us in this purpose, the solution is simple. Just add resistance. For that matter, we have a similar issue with unwanted noise in our various copper traces. So we just filter those out. But to do that, we suddenly need more components.
+Our simple corcuit now turned a touch more complex. PCBs are also usually quite ridgid unless you pay extra.
+So to make sure we fit the design from the previous chapter [citation], we will actually need two PCBs. One for the lights and two buttons, then one for the rest of it. At least that's the current idea.
+
+
