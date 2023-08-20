@@ -27,7 +27,9 @@ But which connector? Well, how many wires do we need? We need two wires for each
 
 Okay, but hold on. Since the 639 page long datasheet for the RP2040 has been a steady companion on all of our nightstands for the past few weeks, we obviously know that the RP2040 can only put out 3.3V. But the SK6812s require a 5V data input? What does that even mean?
 
-### Tangent: Logic levels and voltages
+---
+
+### \<Tangent: Logic levels and voltages>
 
 Data in the electrical world is represented in many ways. But in the core of it all are the bits. The smallest possible pieces of information. Ones and zeroes. Bits themselves have no intrinsic meaning, and is completely up to the reader.
 The buttons for example will "give" a one when pressed in, and a zero when not. But the SK6912s bits will be more structured, taking the shape of 16 bit long binary values in a certain order.
@@ -46,7 +48,9 @@ That can't be said for if you send 5V into something expecting 3.3V. At the best
 
 Now that should be enough redundant text about things that most people already know either explicitly or intuativly to return us to where we left off.
 
-### Tangent end
+ *\</Tangent>*
+
+ ---
 
 Where were we? Right, two different logic levels. Thankfully for us, there's ways to solve this quite easily with the use of a transistor. Think of a transistor as an electrically controlled switch. It takes a current or voltage to controll the internal resistance between two points. That allows a lower voltage source to control a highter voltage source.
 Exactly what we need to step up the data from 3.3V to 5V. So let's add a transistor to the shopping list. But... Which transistor? PNP, or NPN, or MOSFET, or J-FET, or... Don't worry about it. This isn't a new problem that needs solving, and smarter people have solved it before. Oh, and we also need another resistor.
@@ -60,5 +64,29 @@ Bam, the shopping list is basically done. To handle the 3 components we wanted, 
 
 Now we can work on the layout and design! 
 
+## Almost there
 
-((( Lägg till en punktlista för att visa djupet )))
+The first step to making a PCB is to decide on a more abstract scale how things are supposed to connect together. This is called the electrical diagram. It serves the purpose of planning out the internal connections of all the components, but without being restricted by such annoyances as "electrical continuity" or "currents".
+As you can see, it's just each component and their respective connections layed out for maximum readability. Connections are made using simple lines that worry not about voltages or amperages. Even teleportation is allowed via the use of labels. The entire purpose is to just give a really clear view of what will be a very not clear view once you start laying it out on a pcb. This is also used by the CAD software to give hints of where things are to be connected <sup>*(Called a ratsnest)*</sup>.
+
+Usually this isn't too bad, since most PCB CAD software has a good library of all your standard components. KiCad, the software I used, even had footprints for the SK6812 Minis!
+
+## Finally a PCB
+
+Now that we have this all drawn out and peer reviewed. You're gonna wanna take a break of a day or so then confirm that you've put every connection to the right place, and that you havent forgotten anything like say a resistor. Make sure you actually check your that your pads correspond to the right pad number. Confirm it with the datasheet. Then get it peer reviewed again. This is by far the cheapest point to find mistakes. Both in time and money. If you find an error while drawing up the PCB then you'll have to spend time rerouting traces. If you find it while debugging the board after you've soldered it, then you will hope that you can get away with a bodge fix. Something like a scratched out trace, an added resistor, or a wire to create a new trace. If that's your fix, then youre lucky. I had to redesign the pcb to correct misplaced components, reroute all the traces, order new boards, source and buy new components to replace the ones on the now useless board, and solder it all together again.
+
+## My error(s)
+
+<img src="/images/Ch1/MyError.png" width="300px" align="left"/>
+
+In the haste of wanting to get my hands on a board so that I can start prototyping the software, I missed that KiCad had a footprint for the SK6812Minis. That's why I tried to make my own and in doing so I mixed up the pads for some unexplainable reason. I even managed to mix them up in such a way that I couldnt just rotate the LEDs and hope for the best.
+This might seem obvious, but it took me about 10 hours to figure this out. It also wasnt my only mistake. I also managed to get tripped up by the SK6812Minis unusual orientation indicator. A mark of some sort usually placed by pin 1 of the chip to allow for proper orientation of an otherwise symmetrical component. The standard SK6812s have this indication by pin 1, but the Minis don't. They place it by pin 3. Which means that you'll end up mounting the LEDs backwards unless you remember this. I did not remember this. 
+To this error I gave 3 hours of debugging before it was found. So I desoldered them all, and used my last 5 LEDs to redo it. It still didn't work of course. So I started probing it with an oscilloscope. My signal after the transistor that was supposed to amplify my signal to 5v actually lowered it. My eyes were turned towards the transistor then, since thats where the error seemingly originated from. MOSFETs are quite sensitive to ESD [citation] damage, so I feared I'd damaged it. Therefore I replaced it with a spare. Still no dice.
+This is around where I noticed a severe lack of voltage across the 5V to GND of my connector. I poked around and couldn't find out why, so I did the easy thing. I removed it and soldered some wires straight to the connector pads, then superglued them in place.
+
+**Yet it still did not work!**
+
+At this point I was tired and desperate. I had access to some hole mounded MOSFETs, and I knew how they were supposed to work. So I connected them up with a breadboard and conformed that it actually worked. Then I took that confirmed working hole mounting transistor and bent the legs of it and soldered *that* to the PCB. [picture]
+Yet this frankensteins monster of a PCB did not make the LEDs glow. At this point a friend asked me if I had checked the datasheet. "Of course I have." I said. "But I guess I'll do it again" I thought. The frustration and relief fought as I saw my error. ***The*** error. But I had found it. After a few days, I opened my project back up and replaced the faulty symbols in my electrical schematic with correct ones <sup>*(Double checked this time)*</sup> and deleted my PCB layout. Do again, do right.
+
+## Revision 2
