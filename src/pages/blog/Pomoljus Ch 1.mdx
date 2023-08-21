@@ -66,27 +66,76 @@ Now we can work on the layout and design!
 
 ## Almost there
 
-The first step to making a PCB is to decide on a more abstract scale how things are supposed to connect together. This is called the electrical diagram. It serves the purpose of planning out the internal connections of all the components, but without being restricted by such annoyances as "electrical continuity" or "currents".
-As you can see, it's just each component and their respective connections layed out for maximum readability. Connections are made using simple lines that worry not about voltages or amperages. Even teleportation is allowed via the use of labels. The entire purpose is to just give a really clear view of what will be a very not clear view once you start laying it out on a pcb. This is also used by the CAD software to give hints of where things are to be connected <sup>*(Called a ratsnest)*</sup>.
+The first step to making a PCB is to decide on a more abstract scale how things are supposed to connect together. A so called "electrical diagram". It serves the purpose of planning out the internal connections of all the components, but without being restricted by such annoyances as "manufacturability" or "physics". 
 
-Usually this isn't too bad, since most PCB CAD software has a good library of all your standard components. KiCad, the software I used, even had footprints for the SK6812 Minis!
+<img src="/images/Ch1/ElectricalDiagram.png" width="500px"/>
+
+As you can see, it's just symbols representing components and their respective connections layed out for maximum readability. Connections are made using simple lines that worry not about voltages or amperages. Even teleportation is allowed via the use of labels. The entire purpose is to just give a really clear view of what will be a very not clear view once you start laying it out on a PCB. This is also used by the CAD software to give hints of where things are to be connected <sup>*(Called rats nests)*</sup>. Usually this step isn't too bad, since most PCB CAD software has a good library of all your standard components, and you probably have a pretty good idea of your electrical layout when you get to this step.
+
+A really important part to this though, is verification. Giving the diagram a thorough inspection, running some electrical rules checker tool, and getting it peer reviewed are all essentials. You're gonna wanna take a break of a day or so then inspect it again. Make sure you actually the symbols are correct too. Confirm it with the datasheet! Then get it peer reviewed again. This is by far the cheapest point to find mistakes. Both in time and money. An error caught here can be fixed in minutes. An error caught while routing PCB traces can cost you hours. Even if theres no material cost yet, time is still money. If you're unlucky enough to order a PCB with an error unnoticed then you will spend both hours trying to locate the fault, hours correcting it, and hours correcting the PCB layout. Most likely you've also spent money on the faulty board, and possibly on replacement components.
 
 ## Finally a PCB
 
-Now that we have this all drawn out and peer reviewed. You're gonna wanna take a break of a day or so then confirm that you've put every connection to the right place, and that you havent forgotten anything like say a resistor. Make sure you actually check your that your pads correspond to the right pad number. Confirm it with the datasheet. Then get it peer reviewed again. This is by far the cheapest point to find mistakes. Both in time and money. If you find an error while drawing up the PCB then you'll have to spend time rerouting traces. If you find it while debugging the board after you've soldered it, then you will hope that you can get away with a bodge fix. Something like a scratched out trace, an added resistor, or a wire to create a new trace. If that's your fix, then youre lucky. I had to redesign the pcb to correct misplaced components, reroute all the traces, order new boards, source and buy new components to replace the ones on the now useless board, and solder it all together again.
+<img src="/images/Ch1/ComponentLayout.png" width="200px" align="left"/>
+
+Now that we have this all drawn out and peer reviewed, the layout and tracing can begin. I had a specific shape in mind for the lightbar PCB, so I had to work within those restraints. I also knew I wanted all my 5 LEDs spaced evenly across the board, my connector poking out by the bulge in the outline, and one button on each half opposite of the LEDs. I also needed the decoupling capacitors close to the 5V pad for each led, and the logic stepdown resistors close to the buttons. The rest of the components were placed wherever there was room. 
+
+<img src="/images/Ch1/Rats.png" width="180px" align="right"/>
+
+The next step is to connect all the pads with traces. This is probably the most time consuming stage for a project of this size. But thankfully we have the aforementioned rats nest guides. The thin blue lines show you where the closest pad of the same "net", or type, is. Once they're all gone, you're probably done.
+
+There's a reason why electronics engineering is a profession. You can fill a years worth of lectures to learn the ins and outs of traces. How crosstalk, impedance matching, inductive signals, and whatever else affects your signal integrity and currents in your circuit. I know a very little of all this, yet I managed to get lights glowing in the end! A big reason for this is that the SK6812s only need data at 800 KHz. Which might seem like a lot, but the RP2040 runs at 133 MHz. A cool 166 times faster, and the standard desktop PC processor is up over the GHzs. So for this application at our relatively low clockspeeds, no major worry needs to be put in the trace design. The one thing is to keep your power traces <sup>*(5V+ & GND)*</sup> as thick as you can. 
+
+<img src="/images/Ch1/PcbR1.png" sub="the"/>
+
+Then it was just to order the board. Theres a few options out there for small batch prototyping production houses. One well known chinese one that I've used before with pretty good results. Though you also have Aisler in Germany and OshPark in the USA that both have comparable services. Aisler the most costly out of the three, but not anything that will break bank. OshPark is really cheap, but takes a long time to ship from the USA to Europe, and then its import tax ontop of it. For this board I went with Aisler and was really happy!
 
 ## My error(s)
 
-<img src="/images/Ch1/MyError.png" width="300px" align="left"/>
-
-In the haste of wanting to get my hands on a board so that I can start prototyping the software, I missed that KiCad had a footprint for the SK6812Minis. That's why I tried to make my own and in doing so I mixed up the pads for some unexplainable reason. I even managed to mix them up in such a way that I couldnt just rotate the LEDs and hope for the best.
 This might seem obvious, but it took me about 10 hours to figure this out. It also wasnt my only mistake. I also managed to get tripped up by the SK6812Minis unusual orientation indicator. A mark of some sort usually placed by pin 1 of the chip to allow for proper orientation of an otherwise symmetrical component. The standard SK6812s have this indication by pin 1, but the Minis don't. They place it by pin 3. Which means that you'll end up mounting the LEDs backwards unless you remember this. I did not remember this. 
 To this error I gave 3 hours of debugging before it was found. So I desoldered them all, and used my last 5 LEDs to redo it. It still didn't work of course. So I started probing it with an oscilloscope. My signal after the transistor that was supposed to amplify my signal to 5v actually lowered it. My eyes were turned towards the transistor then, since thats where the error seemingly originated from. MOSFETs are quite sensitive to ESD [citation] damage, so I feared I'd damaged it. Therefore I replaced it with a spare. Still no dice.
-This is around where I noticed a severe lack of voltage across the 5V to GND of my connector. I poked around and couldn't find out why, so I did the easy thing. I removed it and soldered some wires straight to the connector pads, then superglued them in place.
+
+<img src="/images/Ch1/ProSolder.png" width="300px" align="right"/>
+
+It was at this point that I started questioning my electrical diagram.
+I managed to convince myself that I had misremembered how a MOSFET worked and therefore connected it all wrong! I also managed to convince myself that I knew how to properly connect it. So I got yet another transistor, and some really tiny copper thread, and soldered the most finnicky connections I've ever made. Yet this impressive demonstration of patience yelded nothing but strained eyes.
+
+<img src="/images/Ch1/RainbowWire.png" width="300px" align="left"/>
+
+This is around where I noticed a severe lack of voltage across the 5V to GND of my connector. I poked around the connector and wire with the continuity tester of a multimeter and couldn't find out why. So I did the easy thing. I removed it and soldered some wires straight to the connector pads, then superglued them in place. *(It actually turned out really nice, and I'm considering using the colour scheme as the final product.)*
 
 **Yet it still did not work!**
 
-At this point I was tired and desperate. I had access to some hole mounded MOSFETs, and I knew how they were supposed to work. So I connected them up with a breadboard and conformed that it actually worked. Then I took that confirmed working hole mounting transistor and bent the legs of it and soldered *that* to the PCB. [picture]
-Yet this frankensteins monster of a PCB did not make the LEDs glow. At this point a friend asked me if I had checked the datasheet. "Of course I have." I said. "But I guess I'll do it again" I thought. The frustration and relief fought as I saw my error. ***The*** error. But I had found it. After a few days, I opened my project back up and replaced the faulty symbols in my electrical schematic with correct ones <sup>*(Double checked this time)*</sup> and deleted my PCB layout. Do again, do right.
+<img src="/images/Ch1/AlienTransistor.png" width="200px" align="right"/>
+
+At this point I was tired and desperate. I had access to some hole mounded MOSFETs, and I knew how they were supposed to work. So I connected them up with a breadboard and conformed that it actually worked. Then I took that confirmed working hole mounting transistor and bent the legs of it and soldered *that* to the PCB.
+
+Yet this frankensteins monster of a PCB did not make the LEDs glow. At this point a friend asked me if I had checked the datasheet. "Of course I have." I said. "But I guess I'll do it again" I thought. The frustration and relief fought as I saw my error. 
+
+<img src="/images/Ch1/MyError.png" width="300px" align="left"/>
+
+***The*** error.
+
+In the haste of wanting to get my hands on a board so that I can start prototyping the software, I missed that KiCad had a footprint for the SK6812Minis. That's why I tried to make my own and in doing so I mixed up the pads for some unexplainable reason. I even managed to mix them up in such a way that I couldnt just rotate the LEDs and hope for the best.
+
+But I had found it. After a few days, I opened my project back up and replaced the faulty symbols in my electrical schematic with correct ones <sup>*(Double checked this time)*</sup> and deleted my PCB layout. Do again, do right.
 
 ## Revision 2
+
+Though it sucked that I needed to do a full revising of the board already, I also took this opportunity to fix some general things that had been bothering me with the first rev. Firstly I fixed the obvious things, mainly the faulty symbol, but also an electrical short that required you to break off one of the legs from the buttons.
+
+Since I needed to reroute the traces for all the LEDs, I actually just remade the entire board. That allowed me to change my dimensions also. The board used to be `9.25 mm` by `57.25 mm`, which wasnt optimal. So I instead made it `10.0 mm` by `60.0 mm`. A slight increase in size, but the round centimeters would make my life a lot easier in the future.
+
+<img src="/images/Ch1/Silkscreen.png" width="100px" align="right"/>
+
+I also added a print so that I dont need to look up the schematic every time I want to connect the board to something while debugging. This has actually turned out to be a huge quality of life improvement.
+
+But this is the board as it is today. Other than me goofing up and mounting the SK6812Minis backwards ***again***, I really havent found any critical errors in the PCB design. I had to scale a resistor as it was limiting current too much, and I should add some pull-down resistors to the controlling pin of my MOSFET. But these can survive on the board for now.
+
+<img src="/images/Ch1/Lights.png" width="300px" align="right"/>
+
+Getting the LEDs to blink took a while, as the oversized resistor was hard to find, but after that I am glad to show you a working lightbar! Here it's controlled by a Raspberry Pi Pico development board. But more on that in the next blogpost! I've already put a few hours on it, so hopefully that means it wont die on me anytime soon.
+
+---
+
+## References
