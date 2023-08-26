@@ -2,8 +2,10 @@
 title: Markdown Styling
 description: "Markdown Styling for Blog Posts"
 pubDate: November 30, 2022
+draft: true
 ---
-import Image from "@components/Image.astro"
+
+import Image from "@components/Image.astro";
 
 This is a test blog post to see how markdown styling works. I'm going to try to make this as long as possible to see how the styling works.
 
@@ -16,7 +18,6 @@ This is styled using `@tailwindcss/typography` plugin. Markdown sample is from [
 ## Paragraphs
 
 Lorem ipsum dolor sit amet, consectetur adipiscing elit 🤣, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Id donec ultrices tincidunt arcu non sodales neque sodales. Adipiscing diam donec adipiscing tristique risus nec feugiat in.
-
 
 # Heading 1
 
@@ -54,7 +55,7 @@ This is really **_very_** important text.
 
 ### Unordered
 
-- Create a list by starting a line with "*-*" sign
+- Create a list by starting a line with "_-_" sign
 - Sub-lists are made by indenting 2 spaces:
   - Marker character change forces new list start:
     - Ac tristique libero volutpat at
@@ -84,23 +85,24 @@ This is an array `[1, 2, 3]` of numbers 1 through 3.
 ```html
 <h1>Code Block</h1>
 ```
+
 With code title:
 
 ```jsx title="src/components/Counter.jsx" {1}
-import { createSignal } from 'solid-js'
+import { createSignal } from "solid-js";
 
 export default function Counter() {
-  const [count, setCount] = createSignal(0)
+  const [count, setCount] = createSignal(0);
 
-  const add = () => setCount((i) => i + 1)
+  const add = () => setCount((i) => i + 1);
 
   return (
-    <div class='flex gap-x-4'>
-      <button type='button' onClick={add}>
+    <div class="flex gap-x-4">
+      <button type="button" onClick={add}>
         the count is {count()}
       </button>
     </div>
-  )
+  );
 }
 ```
 
@@ -116,13 +118,13 @@ export default function Counter() {
 
 ### Adding Titles
 
-[YouTube](https://youtube.com 'Go to YouTube')
+[YouTube](https://youtube.com "Go to YouTube")
 
-[My Website](https://lanceross.xyz 'Lance Ross')
+[My Website](https://lanceross.xyz "Lance Ross")
 
 ## Image
 
-> Image compress and resize by [`@astrojs/image`](https://docs.astro.build/en/guides/integrations-guide/image/ "@astrojs/image's guide"). 
+> Image compress and resize by [`@astrojs/image`](https://docs.astro.build/en/guides/integrations-guide/image/ "@astrojs/image's guide").
 
 Currently, my custom component for images only supports 16:9 aspect ratio or else it will squish the image.
 
@@ -133,9 +135,15 @@ Currently, my custom component for images only supports 16:9 aspect ratio or els
 
 ```
 
-<Image src="/images/jules-beagle-unsplash.jpg" alt="Beagle Dog by Jules D. on Unsplash" />
+<Image
+  src="/images/jules-beagle-unsplash.jpg"
+  alt="Beagle Dog by Jules D. on Unsplash"
+/>
 
-<Image src="/images/portrait-beagle-unsplash.jpg" alt="Beagle Dog by Jules D. on Unsplash" />
+<Image
+  src="/images/portrait-beagle-unsplash.jpg"
+  alt="Beagle Dog by Jules D. on Unsplash"
+/>
 
 ### Strikethrough
 
