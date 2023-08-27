@@ -1,22 +1,39 @@
 ---
 import Layout from "@layouts/Layout.astro";
 import ProjectCard from "@components/ProjectCard.astro";
+import { Icon } from "astro-icon";
 
 type ProjectCard = {
   title: string;
   pubDate: string;
   description: string;
   imageSrc: string;
-}
+  draft?: boolean;
+};
 
 let projects = await Astro.glob<ProjectCard>("./projects/*.mdx");
-projects = projects.sort((a, b) => new Date(b.frontmatter.pubDate).valueOf() - new Date(a.frontmatter.pubDate).valueOf());
+projects = projects.sort(
+  (a, b) =>
+    new Date(b.frontmatter.pubDate).valueOf() -
+    new Date(a.frontmatter.pubDate).valueOf()
+);
+projects = projects.filter((project) => !project.frontmatter.draft);
 ---
 
 <Layout>
-  <section class="grid py-10 place-items-center text-center">
-    <h1 class="sm:text-4xl text-3xl font-bold mb-6 dark:text-white">Bpall</h1>
-    <p>Bpall's projects and blog</p>
+  <section class="flex flex-col gap-10 py-10">
+    <header
+      class="flex justify-center items-center text-5xl font-bold gap-5 pb-10"
+    >
+      <Icon name="mdi:stool" class="w-24 h-24" />
+      Bpall
+    </header>
+    <div>
+      {
+        projects.map((project) => (
+          <ProjectCard {...project.frontmatter} url={project.url} />
+        ))
+      }
+    </div>
   </section>
-  {projects.map((project) => <ProjectCard {...project.frontmatter} url={project.url} />)}
 </Layout>

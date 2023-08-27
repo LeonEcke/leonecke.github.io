@@ -4,7 +4,6 @@ import Footer from "@components/Footer.astro";
 import "@fontsource/inter/variable.css";
 import "@fontsource/fira-code/variable.css";
 
-
 let { pubDate } = Astro.props.content;
 const { frontmatter } = Astro.props;
 const canonicalURL = new URL(Astro.url).href;
@@ -26,7 +25,8 @@ const defaultMeta = {
   imageAlt: "Mountain Logo with NoFuss",
 };
 
-const { heroImage = defaultMeta.image, imageAlt = defaultMeta.imageAlt } = Astro.props as Props;
+const { heroImage = defaultMeta.image, imageAlt = defaultMeta.imageAlt } =
+  Astro.props as Props;
 
 const classBody =
   "scrollbar-thin scrollbar-thumb-zinc-400 scrollbar-track-zinc-300 dark:scrollbar-thumb-zinc-600 dark:scrollbar-track-zinc-800 dark:bg-zinc-900 dark:text-white font-inter selection:bg-blue-500/70 text-xl";
@@ -63,14 +63,19 @@ const classBody =
     <meta name="author" content="Lance Ross" />
     <script is:inline>
       const primaryColorScheme = "none";
-      const darkModeMediaQuery = window.matchMedia("(prefers-color-scheme: dark)").matches;
+      const darkModeMediaQuery = window.matchMedia(
+        "(prefers-color-scheme: dark)"
+      ).matches;
       const currentTheme = localStorage.getItem("theme");
 
       let theme;
       if (currentTheme) {
         theme = currentTheme === "dark" ? "dark" : "";
       } else {
-        if (primaryColorScheme === "dark" || (primaryColorScheme === "none" && darkModeMediaQuery)) {
+        if (
+          primaryColorScheme === "dark" ||
+          (primaryColorScheme === "none" && darkModeMediaQuery)
+        ) {
           theme = "dark";
         } else if (primaryColorScheme === "light") {
           theme = "";
@@ -94,7 +99,12 @@ const classBody =
         </article>
       </section>
       <div class="flex flex-row justify-between">
-        <a href="/blog" class="dark:text-blue-400 text-blue-600 hover:underline mt-5">Go back to posts</a>
+        <a
+          href="/blog"
+          class="dark:text-blue-400 text-blue-600 hover:underline mt-5"
+        >
+          Go back to posts
+        </a>
       </div>
     </main>
     <Footer />
@@ -103,9 +113,9 @@ const classBody =
 
 <style is:global>
   .blogpost img {
-    border-radius: 14px!important;
+    border-radius: 14px !important;
     margin: 20px auto;
-    max-width: calc(100% - 40px)
+    max-width: calc(100% - 40px);
   }
 
   .blogpost img[align="right"] {
