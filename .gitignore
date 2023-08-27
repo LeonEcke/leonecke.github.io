@@ -19,7 +19,6 @@ pnpm-debug.log*
 .DS_Store
 
 # I use pnpm
-package-lock.json
 yarn.lock
 
 # IDE stuff
