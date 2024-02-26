@@ -1,0 +1,53 @@
+---
+title: Pomoljus Ch.12
+description: "This log will dive into the solidification of the Pomoljus into the physical realm in the form of a printed circuit board as well as briefly ending on the things I learnt from it."
+pubDate: February 26, 2024
+---
+
+This log will dive into the solidification of the Pomoljus into the physical realm in the form of a printed circuit board as well as briefly ending on the things I learnt from it. 
+
+---
+
+## The Intro
+
+In order for the pomoljus to work in the physical world, it is no surprise that it needs physical components. Some of these components (thankfully) come pre-made from manufacturers, such as resistors, capacitors, LEDs, and microcontrollers containing several million absolutely unfathomably small transistors. Components that even the most experienced home "maker" would struggle to manufacture on their own. These components does not by them self make a pomoljus though. For that, they need to go together in a certain way to allow for the physical properties of the pomoljus to exist. In other words, the circuit board they get mounted to is custom for this project. 
+
+As shown in the past chapter (which is now about a year old), I had a pretty good idea of what physical properties the pomoljus was to have. Some RGB LEDs for communicating with the user, a pair of buttons for the user to communicate, and a microcontroller. With five LEDs the component total lands at a manageable eight components. It is not enough to simply say "a microcontroller" though. Each of these components have compatibility to worry about, they have size, power consumption, and (depressingly) availability to worry about. So a selection had to be made.
+
+## The Selection
+
+The easiest choice was the microcontroller (MCU from here on), as the world is suffering from a MCU shortage which has a lot of very, *very*... **very** large companies struggling with obtaining the MCUs they need. This means that for the average person, the choice becomes much easier. *"What have you got?"*. As a coincidence, the Raspberry Pi foundation had come out with their own MCU, the RP2040, and it had magically dodged the worst of the MCU shortage. What luck, eh? The RP2040 also features some genuinely cool features, so I also had some personal interest in using it for a project. The MCU isn't actually on the PCB as of right now, but I still wanted to mention it as it will become relevant.
+
+Next up was the RGB LEDs. Originally I intended on using the WS2812 (What is commonly in the Neopixels from AdaFruit). These are serially addressable, which allows them to be chained together. That means that data and power flow from the first to the last LED, instead of requiring a dedicated data and power line for every LED. Very useful. ***But*** finding these very popular LEDs as individual components proved very hard. So instead I went with what some called a "chinese clone" version: the SK6812. Luckily for me they work just fine, and they are cheaper (and AdaFruit now uses them as Neopixels too?). They also come in a mini version, 3.5mm<sup>2</sup> contra 5mm<sup>2</sup>. As the pomoljus is supposed to be a small portable device, small LEDs are good. They did end up biting me at one point though.
+
+Lastly we have the buttons. I just bought a small selection of buttons that were the right size and felt how they clicked. They say that the fewer ingredients you have in your food, the better those ingredients needs to be. I figured the same principle would be accurate here. The buttons feel good.
+
+## The Additional Components
+
+Other than the 8 components we *want*, we also have components that we *need*. In order to wrangle lightning (electricity) through a 0.035mm thick trace of copper, we need to make sure that we at least try to accommodate it. For the current iteration of the pomoljus, this is done in 3 categories. If you're already familiar with electronics this will all be obvious.
+
+### Resistors
+Ohm's law dictates in absolute terms that ``V = R * I`` which in normal terms means that voltage (V), resistance (R), and current (I) are all connected. In practical terms it means that if we have an amount of voltage but not enough resistance, our current will be very high. This usually results in sensitive components releasing their magic smoke. There's a little bit of resistance in the copper traces and components, but we need more. So we introduce resistors. Just like most of the base components, they are insanely useful in all sorts of applications. Basically the salt of electronics. In the current iteration of the pomoljus, resistors are used basically only for these secondary [SHRIV OM HELA STYCKET???, prata om spänningsfördelning??]
+
+### Capacitors
+
+When a lot of water flows through a pipe and a valve is suddenly closed, a lot of mass comes to a sudden stop. As momentum is a b\*\*\*h, that results in the water slamming really hard into whatever is in the way. A phenomenon called *"water hammer"* or *"hydraulic shock" <sup>[\[1\]](#references)</sup>. In electronics there is a similar effect usually called *"why did my MCU just reboot!?"*. If you have an MCU suddenly demand a lot of current, then there can be a sort of reverse water hammer effect where the electrons from the power source can't get moving fast enough to supply the current demand. This causes the voltage to drop, and if it drops below your components operating requirements then it starts behaving strangely. In order to avoid this we add capacitors. Capacitors are really useful because of their (relatively) slow charge and discharge times. Once there's a current difference between the two ends of a capacitor, it takes a bit for it to discharge. That means that it can supply any sudden demands for current for a very short amount of time. But as electrons are quite fast, that is enough to save our suddenly current hungry component from dropping the voltage too low. These capacitors are usually placed as close as you can to the component who needs it. We'll also place one by the 5V and GND on the PCB to help against uneven voltages there too. [Långt]
+
+### Transistor
+
+There is one single transistor on the current PCB if you exclude the "unfathomably small" transistors inside of the MCU and the LEDs. A transistor is basically (not actually) a valve controlled by current or voltage. Small current into one part of the transistor opens the flow of big current through it. Transistors are the backbone of the modern world. Humanity evolved into the digital creatures we are today thanks to the transistor. Google them, read about them, it's insane what you can do with them. For this project, I am using one discrete transistor to change a 3.3V signal from the RP2040 MCU into a 5V signal for the SK6812 LEDs. 
+
+And that ought to be all the components needed. We also have a connector too, but that's basically just fancy wire, so its not really important. You also have to buy the components.
+
+## The Purchases
+
+
+## The CAD
+
+Now you have all the bo
+
+
+---
+
+### References
+1. https://en.wikipedia.org/wiki/Water_hammer
